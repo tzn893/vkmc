@@ -1,5 +1,0 @@
-# CMake generation dependency list for this directory.
-C:/Program Files/CMake/share/cmake-3.24/Modules/GNUInstallDirs.cmake
-E:/playground/vkmc/flecs/CMakeLists.txt
-E:/playground/vkmc/flecs/cmake/target_default_compile_options.cmake
-E:/playground/vkmc/flecs/cmake/target_default_compile_warnings.cmake

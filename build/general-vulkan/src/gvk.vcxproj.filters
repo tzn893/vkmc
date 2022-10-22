@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_alloc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_pipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\gvk_window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\src\shader\shader_common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\general-vulkan\SPIRV-Reflect\spirv_reflect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_context.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\gvk_window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\src\shader\shader_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\general-vulkan\SPIRV-Reflect\spirv_reflect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\playground\vkmc\general-vulkan\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{47446AE4-CCA0-3574-B0E5-0614EBDB115D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BDDCE57A-9C04-3925-BD91-AF681FC6AB41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

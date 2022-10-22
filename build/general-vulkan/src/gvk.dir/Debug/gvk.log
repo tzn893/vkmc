@@ -1,0 +1,12 @@
+﻿  Building Custom Rule E:/playground/vkmc/general-vulkan/src/CMakeLists.txt
+  gvk_alloc.cpp
+  gvk_command.cpp
+  gvk_context.cpp
+  gvk_pipeline.cpp
+  gvk_resource.cpp
+  gvk_shader.cpp
+  gvk_window.cpp
+  shader_common.cpp
+  spirv_reflect.cpp
+  正在生成代码...
+  gvk.vcxproj -> E:\playground\vkmc\build\general-vulkan\src\Debug\gvk.lib

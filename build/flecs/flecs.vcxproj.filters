@@ -1,0 +1,585 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\app.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\coredoc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\doc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\expr\deserialize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\expr\serialize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\expr\strutil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\expr\vars.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\flecs_cpp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\http.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\json\deserialize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\json\json.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\json\serialize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\json\serialize_type_info.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\log.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\meta\api.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\meta\cursor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\meta\meta.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\meta\serialized.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\meta_c.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\module.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\monitor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\os_api_impl\os_api_impl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\parser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\pipeline\pipeline.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\pipeline\worker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\plecs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\rest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\rules.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\snapshot.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\stats.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\system\system.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\timer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\addons\units.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\bootstrap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\allocator.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\bitset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\block_allocator.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\hash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\hashmap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\map.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\name_index.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\qsort.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\sparse.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\stack_allocator.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\strbuf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\switch_list.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\vec.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\datastructures\vector.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\entity.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\filter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\hierarchy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\id_record.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\iter.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\misc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\observable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\observer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\os_api.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\poly.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\query.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\search.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\stage.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\table.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\table_cache.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\table_graph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\value.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E:\playground\vkmc\flecs\src\world.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\app.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\coredoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\c_types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\component.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\entity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\entity_view.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\flecs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\impl\iter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\impl\world.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\invoker.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\iter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\lifecycle_traits.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\log.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\app\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\app\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\component\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\doc\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\doc\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\entity\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\entity\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\enum\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\event\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\event\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\event\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\filter\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\filter\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\filter\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\filter\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\id\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\id\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\json\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\meta\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\meta\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\module\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\monitor\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\monitor\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\observer\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\observer\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\observer\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\observer\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\pipeline\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\pipeline\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\pipeline\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\pipeline\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\query\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\query\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\query\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\query\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\rest\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\rest\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\rule\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\rule\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\rule\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\snapshot\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\snapshot\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\system\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\system\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\system\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\system\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\term\builder_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\term\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\term\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\timer\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\timer\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\units\decl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\mixins\units\impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\pair.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\ref.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\table.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\type.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\array.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\enum.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\function_traits.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\iterable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\node_builder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\signature.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\string.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\stringstream.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\utils\utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\cpp\world.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\deprecated.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\doc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\expr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\flecs_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\flecs_cpp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\http.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\json.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\meta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\meta_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\module.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\monitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\os_api_impl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\pipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\plecs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\rest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\rules.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\snapshot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\stats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\addons\units.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\bake_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\os_api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\addons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\api_defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\api_flags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\api_support.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\api_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\bitset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\block_allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\hashmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\sparse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\strbuf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\switch_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="E:\playground\vkmc\flecs\include\flecs\private\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="E:\playground\vkmc\flecs\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{47446AE4-CCA0-3574-B0E5-0614EBDB115D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BDDCE57A-9C04-3925-BD91-AF681FC6AB41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,6 @@
+[submodule "general-vulkan"]
+	path = general-vulkan
+	url = https://github.com/tzn893/general-vulkan.git
+[submodule "flecs"]
+	path = flecs
+	url = https://github.com/SanderMertens/flecs.git

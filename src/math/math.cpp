@@ -237,8 +237,32 @@ namespace Math {
         return v0 * (1.f - uv.x - uv.y) + (v1 * uv.x) + (v2 * uv.y);
     }
 
+    static FaceCode pick_face_index(const Bound3f& bound,Vector3f position)
+    {
+        if (abs(bound.upper.x - position.x) < 1e-4) return FACE_CODE_POSITIVE_X;
+        if (abs(bound.upper.y - position.y) < 1e-4) return FACE_CODE_POSITIVE_Y;
+        if (abs(bound.upper.z - position.z) < 1e-4) return FACE_CODE_POSITIVE_Z;
 
-    bool   ray_intersect_bound(const Bound3f& bound, const Ray& r) {
+        if (abs(bound.lower.x - position.x) < 1e-4) return FACE_CODE_NEGATIVE_X;
+		if (abs(bound.lower.y - position.y) < 1e-4) return FACE_CODE_NEGATIVE_Y;
+		if (abs(bound.lower.z - position.z) < 1e-4) return FACE_CODE_NEGATIVE_Z;
+        return FACE_CODE_POSITIVE_X;
+    }
+
+
+	/// <summary>
+///     front face        back face
+///     --------          -------
+///	   /  2   / |        /  4   / |
+///	  /      /  |       /      /  |
+///	  ------- 1 |       ------- 3 |
+///  |       |  /      |       |  |
+///	 |   0   | /       |   5   |  /
+///  |       |/        |       | /
+///   -------           ------- 
+///   numbering of faces
+/// </summary>
+    bool ray_intersect_bound(const Bound3f& bound, const Ray& r, float* t, FaceCode* face_idx, bool* inside) {
         const Vector3f& o = r.o;
         
         uint32_t sign[3];
@@ -263,6 +287,19 @@ namespace Math {
         {
             return false;
         }
+
+        if (tmin < 0) 
+        {
+            if (t) *t = tmax;
+            if (inside) *inside = true;
+        }
+        else 
+        {
+            if (t) *t = tmin;
+            if (inside) *inside = false;
+        }
+        if (face_idx) *face_idx = pick_face_index(bound, r.d * t + r.o);
+
 
         return true;
         
@@ -405,7 +442,20 @@ namespace Math {
             a.w < b.w ? a.w : b.w);
     }
 
-    
+
+    Vector3i get_face_direction(FaceCode code) 
+    {
+        switch (code) 
+        {
+        case FACE_CODE_POSITIVE_X: return Vector3i( 1, 0, 0);
+        case FACE_CODE_POSITIVE_Y: return Vector3i( 0, 1, 0);
+        case FACE_CODE_POSITIVE_Z: return Vector3i( 0, 0, 1);
+        case FACE_CODE_NEGATIVE_X: return Vector3i(-1, 0, 0);
+        case FACE_CODE_NEGATIVE_Y: return Vector3i( 0,-1, 0);
+        case FACE_CODE_NEGATIVE_Z: return Vector3i( 0, 0,-1);
+        }
+        return Vector3i(0, 0, 0);
+    }
 };
 
 Quaternion::Quaternion(const Vector3f& axis, float angle) {
@@ -443,8 +493,33 @@ Vector3f operator-(const Vector3f& a, const Vector3f& b) {
     return Vector3f(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
+Vector3i operator-(const Vector3i& a, int32_t b)
+{
+    return Vector3i(a.x - b, a.y - b, a.z - b);
+}
+
+Vector3i operator-(const Vector3i& a, const Vector3i& b)
+{
+	return Vector3i(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
 Vector3f operator+(const Vector3f& a, const Vector3f& b) {
     return Vector3f(a.x + b.x, a.y + b.y, a.z + b.z);
+}
+
+Vector3i operator+(const Vector3i& a, int32_t b)
+{
+	return Vector3i(a.x + b, a.y + b, a.z + b);
+}
+
+Vector3i operator+(int32_t b, const Vector3i& a)
+{
+	return Vector3i(a.x + b, a.y + b, a.z + b);
+}
+
+Vector3i operator+(const Vector3i& a, const Vector3i& b)
+{
+    return Vector3i(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
 Vector3f operator*(const Vector3f& a, float f) {

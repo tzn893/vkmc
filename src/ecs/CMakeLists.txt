@@ -1,0 +1,5 @@
+file(GLOB ECS_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+file(GLOB ECS_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+
+
+target_sources(vkmc PRIVATE ${ECS_SOURCE} ${ECS_HEADER})

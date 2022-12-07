@@ -11,4 +11,6 @@ public:
 	virtual TaskTick	Tick(TaskManager* manager, float delta_time);
 
 	virtual void		Finalize(TaskManager* manager);
+private:
+
 };

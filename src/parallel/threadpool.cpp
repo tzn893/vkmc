@@ -11,6 +11,8 @@ ThreadPool& ThreadPool::EnqueueJob(std::function<void()> job)
 		m_Jobs.push(job);
 	}
 	m_Notifier.notify_one();
+
+	return *this;
 }
 
 void ThreadPool::Join()
@@ -56,7 +58,7 @@ void ThreadPool::RecreatePool()
 	m_Threads.resize(thread_count);
 	for (uint32_t i = 0; i < thread_count; i++)
 	{
-		m_Threads[i] = std::thread(&ThreadPool::ThreadLoop, *this);
+		m_Threads[i] = std::thread(&ThreadPool::ThreadLoop, this);
 	}
 	m_Stop = false;
 }

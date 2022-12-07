@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include "shader/shader_common.h"
+#include "common.h"
 
 #define al_fequal(f1,f2) (abs(f1 - f2) < 1e-4)
 
@@ -50,7 +51,17 @@ struct Vector2f {
     static Vector2f I;
 };
 
+struct Vector3i
+{
+	union {
+		struct {
+			int32_t x, y, z;
+		};
+		int32_t a[3];
+	};
 
+	Vector3i(int32_t x, int32_t y, int32_t z) :x(x), y(y), z(z) {}
+};
 
 struct Vector3f {
     union{
@@ -74,6 +85,11 @@ struct Vector3f {
     }
 
     Vector3f(float x, float y, float z);
+
+    Vector3f(Vector3i v)
+    {
+        x = v.a[0], y = v.a[1], z = v.a[2];
+    }
 
     const Vector3f& operator=(const Vector3f& vec) {
         memcpy(this, &vec, sizeof(vec));
@@ -129,6 +145,8 @@ struct Vector4f {
 
     static Vector4f I;
 };
+
+
 
 
 struct Quaternion {
@@ -411,7 +429,19 @@ namespace Math {
     //v0 * (1 - u -  v) + v1 * u + v2 * v
     Vector4f interpolate3(const Vector4f& v0, const Vector4f& v1, const Vector4f& v2, const Vector2f& uv);
 
-    bool   ray_intersect_bound(const Bound3f& bound,const Ray& r);
+	/// <summary>
+///     front face        back face
+///     --------          -------
+///	   /  2   / |        /  4   / |
+///	  /      /  |       /      /  |
+///	  ------- 1 |       ------- 3 |
+///  |       |  /      |       |  |
+///	 |   0   | /       |   5   |  /
+///  |       |/        |       | /
+///   -------           ------- 
+///   numbering of faces
+/// </summary>
+    bool ray_intersect_bound(const Bound3f& bound,const Ray& r, float* t, FaceCode* face_idx, bool* inside);
     
     //intersect with triangle
     bool   ray_intersect_triangle(const Vector3f& p1, const Vector3f& p2, const Vector3f& p3, const Ray& r,
@@ -432,6 +462,8 @@ namespace Math {
     bool contains_inf(const Vector4f& v);
 
     bool zero(const Vector3f& v);
+
+    Vector3i get_face_direction(FaceCode code);
 };
 
 //format vector values
@@ -463,23 +495,28 @@ template<> struct fmt::formatter<Vector4f> : fmt::formatter<std::string> {
 
 Vector2f operator-(const Vector2f& a, const Vector2f& b);
 Vector3f operator-(const Vector3f& a, const Vector3f& b);
+Vector3i operator-(const Vector3i& a, const Vector3i& b);
 Vector4f operator-(const Vector4f& a, const Vector4f& b);
 
 Vector2f operator+(const Vector2f& a, const Vector2f& b);
 Vector3f operator+(const Vector3f& a, const Vector3f& b);
+Vector3i operator+(const Vector3i& a, const Vector3i& b);
 Vector4f operator+(const Vector4f& a, const Vector4f& b);
 
 Vector2f operator+(const Vector2f& a, float b);
 Vector3f operator+(const Vector3f& a, float b);
+Vector3i operator+(const Vector3i& a, int32_t b);
 Vector4f operator+(const Vector4f& a, float b);
 
 Vector2f operator+(float b, const Vector2f& a);
 Vector3f operator+(float b, const Vector3f& a);
+Vector3i operator+(int32_t b, const Vector3i& a);
 Vector4f operator+(float b, const Vector4f& a);
 
 Vector2f operator-(const Vector2f& a, float b);
 Vector3f operator-(const Vector3f& a, float b);
 Vector4f operator-(const Vector4f& a, float b);
+Vector3i operator-(const Vector3i& a, int32_t b);
 
 Vector2f operator-(float b, const Vector2f& a);
 Vector3f operator-(float b, const Vector3f& a);

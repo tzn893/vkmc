@@ -1,12 +1,19 @@
 #include "world/world.h"
-
-size_t World::TaskID() const
-{
-	return typeid(World).hash_code();
-}
+#include "camera.h"
+#include "renderer/renderer.h"
 
 bool World::Initialize(TaskManager* manager)
 {
+	u32 win_width, win_height;
+	if(auto r = manager->FindTask<Renderer>();r.has_value())
+	{
+		auto [w, h] = r.value()->GetCurrentBackbufferExtent();
+		win_width = w, win_height = h;
+	}
+
+
+	Singleton<MainCamera>::Get().Initialize(win_width, win_height, Transform());
+
 	return true;
 }
 

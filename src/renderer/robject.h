@@ -11,6 +11,7 @@ struct RenderInitContext
 	ptr<gvk::RenderPass>		main_render_pass;
 	u32							forward_pass_idx;
 	u32							transparent_pass_idx;
+	u32							back_buffer_count;
 };
 
 struct RenderFinalizeContext
@@ -23,6 +24,8 @@ struct RenderContext
 	gvk::Context*		context;
 	VkCommandBuffer		main_cmd_buffer;
 	gvk::SemaphoreInfo*	main_queue_semaphore;
+	u32					frame_index;
+	u32					image_index;
 };
 
 enum RenderObjectType
@@ -66,7 +69,7 @@ public:
 enum CustomRenderObjectOrder
 {
 	CUSTOM_ROBJECT_ORDERER_BEFORE_ALL,
-	CUSTOM_ROBJECT_ORDERER_AFTER_FORWARD,
+	//CUSTOM_ROBJECT_ORDERER_AFTER_FORWARD,
 	CUSTOM_ROBJECT_ORDERER_AFTER_TRANSPARENT,
 	CUSTOM_ROBJECT_ORDERER_AFTER_ALL = CUSTOM_ROBJECT_ORDERER_AFTER_TRANSPARENT
 };

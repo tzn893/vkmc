@@ -115,10 +115,6 @@ public:
 
 } ;
 
-size_t Renderer::TaskID()
-{
-	return typeid(Renderer).hash_code();
-}
 
 bool Renderer::Initialize(TaskManager* manager)
 {
@@ -254,14 +250,14 @@ bool Renderer::Initialize(TaskManager* manager)
 			0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
 
 		//TODO: HIZ pass, for culling
-		//info.AddSubpass(1, VK_PIPELINE_BIND_POINT_COMPUTE);
+		//info.AddSubpass(0, VK_PIPELINE_BIND_POINT_COMPUTE);
 		//info.AddSubpassInputAttachment(1, 1, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		//info.AddSubpassDependency(0, 1, 
 			//VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
 			//VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,VK_ACCESS_INPUT_ATTACHMENT_READ_BIT);
 
 		//TODO: transparent pass
-		//info.AddSubpass(1, VK_PIPELINE_BIND_POINT_GRAPHICS);
+		//info.AddSubpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS);
 		//info.AddSubpassColorAttachment(2, 0);
 		//info.AddSubpassDepthStencilAttachment(2, 1);
 		//info.AddSubpassDependency(0, 2,
@@ -385,7 +381,7 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 	u32				image_idx;
 
 	std::string error;
-	if (auto img = m_Context->AcquireNextImageAfterResize([&]() 
+	if (auto img = m_Context->AcquireNextImageAfterResize([&](u32 w, u32 h)
 		{
 			auto back_buffers = m_Context->GetBackBuffers();
 			for (u32 i = 0; i < m_Context->GetBackBufferCount(); i++)
@@ -397,6 +393,9 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 					return false;
 				);
 			}
+			Singleton<EventSystem>::Get().Dispatch(ResizeEvent(w, h));
+			//TODO resize offscreen buffers
+
 			return true;
 		},&error); img.has_value())
 	{
@@ -435,39 +434,52 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 	VkCommandBufferBeginInfo cmd_begin{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
 	cmd_begin.flags = VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT;
 	vkBeginCommandBuffer(cmd, &cmd_begin);
+
 	m_MemoryArenaAllocator.Reset();
 	
-	std::vector<RenderObject*> robjs;
-	//reserve 32 blocks' place to prevent vector's resizing 
-	robjs.reserve(32);
+	//forward render objects
+	std::vector<CustomRenderObject*> before_all_robjs;
+	RenderObjectGroupCollector opaque_groups;//, transparent_groups;
+	std::vector<CustomRenderObject*> after_transparent_robjs;
 	for (auto component : m_RegisteredRenderComponents)
 	{
 		if (component->Activated())
 		{
-			robjs.push_back(component->OnRender(&m_MemoryArenaAllocator));
+			RenderObject* robj = component->OnRender(&m_MemoryArenaAllocator);
+			if (robj->GetType() == RENDER_OBJECT_FORWARD)
+			{
+				ForwardRenderObject* frobj = dynamic_cast<ForwardRenderObject*>(robj);
+				//get context of forward render object
+				GraphicsObjectContext fctx = frobj->Context();
+				opaque_groups.Collect(frobj, fctx);
+			}
+			if (robj->GetType() == RENDER_OBJECT_CUSTOM)
+			{
+				CustomRenderObject* crobj = dynamic_cast<CustomRenderObject*>(robj);
+				switch (crobj->GetOrder())
+				{
+				case CUSTOM_ROBJECT_ORDERER_BEFORE_ALL:
+					before_all_robjs.push_back(crobj);
+					break;
+				case CUSTOM_ROBJECT_ORDERER_AFTER_TRANSPARENT:
+					after_transparent_robjs.push_back(crobj);
+					break;
+				}
+			}
 		}
 	}
 	
-	//forward render objects
-	RenderObjectGroupCollector opaque_groups;//, transparent_groups;
-	//collect forward render objects 
-	for (RenderObject* robj : robjs)
-	{
-		if (robj->GetType() == RENDER_OBJECT_FORWARD)
-		{
-			ForwardRenderObject* frobj = dynamic_cast<ForwardRenderObject*>(robj);
-			//get context of forward render object
-			GraphicsObjectContext fctx = frobj->Context();
-			opaque_groups.Collect(frobj, fctx);
-		}
-	}
-
-
 	RenderContext rctx;
 	rctx.context = m_Context.get();
 	rctx.main_cmd_buffer = cmd;
 	rctx.main_queue_semaphore = &main_queue_semaphore;
+	rctx.frame_index = frame_idx;
+	rctx.image_index = image_idx;
 
+	for (auto crobj : before_all_robjs)
+	{
+		crobj->OnRender(rctx);
+	}
 
 	m_ForwardRenderPass->Begin(m_OffscreenFrameBuffers[image_idx], &clear_value,
 		render_area, viewport, scissor, cmd)
@@ -503,7 +515,15 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 		}
 
 		//TODO hiz pass and transparent pass
+
+		
 	});
+
+	//render after transparent custom render objects
+	for (auto crobj : after_transparent_robjs)
+	{
+		crobj->OnRender(rctx);
+	}
 
 	//post process pass
 	m_PostScreenRenderPass->Begin(m_PostScreenFrameBuffers[image_idx], &clear_value,
@@ -555,7 +575,7 @@ void Renderer::Finalize(TaskManager* manager)
 	m_Window = nullptr;
 }
 
-bool Renderer::RegisterRenderComponent(RenderComponent* component)
+bool Renderer::RegisterRenderComponent(ptr<RenderComponent> component)
 {
 	//we should not register repeated components
 	if (std::find( m_RegisteredRenderComponents.begin(),m_RegisteredRenderComponents.end(), component)
@@ -567,6 +587,7 @@ bool Renderer::RegisterRenderComponent(RenderComponent* component)
 		ctx.main_render_pass = m_ForwardRenderPass;
 		ctx.forward_pass_idx = 0;
 		ctx.transparent_pass_idx = 2;
+		ctx.back_buffer_count = m_OffscreenBuffers.size();
 
 		if (component->Initialize(ctx))
 		{
@@ -581,7 +602,7 @@ bool Renderer::RegisterRenderComponent(RenderComponent* component)
 	return true;
 }
 
-void Renderer::UnregisterRenderComponent(RenderComponent* component)
+void Renderer::UnregisterRenderComponent(ptr<RenderComponent> component)
 {
 	auto pos = std::find(m_RegisteredRenderComponents.begin(), m_RegisteredRenderComponents.end(), component);
 	if (pos != m_RegisteredRenderComponents.end())
@@ -592,6 +613,14 @@ void Renderer::UnregisterRenderComponent(RenderComponent* component)
 
 		m_RegisteredRenderComponents.erase(pos);
 	}
+}
+
+
+
+std::tuple<u32, u32> Renderer::GetCurrentBackbufferExtent()
+{
+	auto extent = m_Context->GetBackBuffers()[0]->Info().extent;
+	return std::make_tuple(extent.width, extent.height);
 }
 
 Renderer::Renderer(float offscree_scale_ratio, ptr<gvk::Window> window)

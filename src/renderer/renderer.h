@@ -5,13 +5,18 @@
 
 class RenderComponent;
 
+EVENT_CLASS(ResizeEvent)
+ResizeEvent(u32 w, u32 h) :new_width(w), new_height(h) {}
+
+u32 new_width, new_height;
+EVENT_CLASS_END(ResizeEvent)
+
+
 class Renderer : public Task 
 {
 public:
 
 	Renderer(float offscree_scale_ratio,ptr<gvk::Window> window);
-
-	virtual size_t		TaskID() ;
 
 	virtual bool		Initialize(TaskManager* manager) ;
 
@@ -19,11 +24,14 @@ public:
 
 	virtual void		Finalize(TaskManager* manager) ;
 
-	bool				RegisterRenderComponent(RenderComponent* compoent);
+	bool				RegisterRenderComponent(ptr<RenderComponent> compoent);
 
-	void				UnregisterRenderComponent(RenderComponent* component);
+	void				UnregisterRenderComponent(ptr<RenderComponent> component);
+
+	std::tuple<u32, u32> GetCurrentBackbufferExtent();
 
 private:
+
 	ptr<gvk::Context>		m_Context;
 	ptr<gvk::Window>		m_Window;
 	ptr<gvk::CommandQueue>	m_Queue;
@@ -63,7 +71,7 @@ private:
 	std::string										m_ShaderRootPath;
 	std::vector<VkCommandBuffer>					m_CommandBuffers;
 
-	std::vector<RenderComponent*>					m_RegisteredRenderComponents;
+	std::vector<ptr<RenderComponent>>				m_RegisteredRenderComponents;
 
 	//arena allocator for allocating render objects in every frame
 	MemoryArenaAllocator							m_MemoryArenaAllocator;

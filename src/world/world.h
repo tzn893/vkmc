@@ -4,7 +4,6 @@
 class World : public Task 
 {
 public:
-	virtual size_t		TaskID() const;
 
 	virtual bool		Initialize(TaskManager* manager) ;
 
@@ -12,5 +11,4 @@ public:
 
 	virtual void		Finalize(TaskManager* manager);
 private:
-
 };

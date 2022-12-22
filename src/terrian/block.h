@@ -35,10 +35,12 @@ struct Block
 
 inline constexpr u32 BLOCK_LEN_BIT_COUNT = 7;
 inline constexpr u32 BLOCK_LEN = 1 << BLOCK_LEN_BIT_COUNT;
+inline constexpr u32 BLOCK_CHUNK_SIZE = BLOCK_LEN * BLOCK_LEN * BLOCK_LEN * sizeof(Block);
 
 
 //the morton code of the block is the block's coordinate
 struct BlockCoordinate {
+
 	BlockCoordinate() : m_MortonCode(0) {}
 
 	BlockCoordinate(u32 code) : m_MortonCode(code) {}
@@ -79,6 +81,7 @@ public:
 	const Block&				Access(BlockCoordinate coord);
 
 	void						Update(BlockCoordinate coord, BlockType type);
+
 private:
 
 	std::vector<Block>			m_Blocks;

@@ -4,6 +4,7 @@
 #include <optional>
 #include <functional>
 #include <algorithm>
+#include "util/util.h"
 
 template<typename T>
 using ptr = std::shared_ptr<T>;
@@ -57,3 +58,4 @@ inline FaceCode OppsiteFaceCode(FaceCode code)
 {
 	return (FaceCode)((code + 3) % 6);
 }
+

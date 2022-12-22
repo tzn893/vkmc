@@ -1,4 +1,4 @@
-add_executable(vkmc main.cpp common.h common.cpp)
+add_executable(vkmc main.cpp common.h)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
@@ -18,6 +18,7 @@ add_subdirectory(renderer)
 add_subdirectory(terrian)
 add_subdirectory(world)
 add_subdirectory(ecs)
+add_subdirectory(util)
 
 target_link_libraries(vkmc gvk flecs spdlog xxhash)
 

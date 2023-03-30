@@ -10,5 +10,6 @@ add_subdirectory(xxHash/cmake_unofficial)
 add_subdirectory(general-vulkan)
 add_subdirectory(flecs)
 add_subdirectory(spdlog)
+add_subdirectory(glm)
 
 add_subdirectory(src)

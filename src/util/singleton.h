@@ -1,3 +1,4 @@
+#pragma once
 //tag a class as singleton object
 class Is_Signleton 
 {

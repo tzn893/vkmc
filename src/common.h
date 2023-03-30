@@ -23,7 +23,7 @@ using i16 = int16_t;
 using i8 = int8_t;
 
 
-#define vkmc_assert(expr) if(!(expr)) {__debugbreak();exit(-1);}
+#define vkmc_assert(expr) if(!(expr)) {vkmc_error("assertion fails at file {},line {},expression: \"{}\" ",std::string(__FILE__),__LINE__,std::string(""#expr))  ;__debugbreak();exit(-1);}
 
 #ifdef DEBUG
 #define vkmc_debug_assert(expr) vkmc_assert(expr)
@@ -59,3 +59,12 @@ inline FaceCode OppsiteFaceCode(FaceCode code)
 	return (FaceCode)((code + 3) % 6);
 }
 
+
+extern float GVK_MARKER_COLOR_GREEN[4];
+extern float GVK_MARKER_COLOR_RED[4];
+extern float GVK_MARKER_COLOR_BLUE[4];
+extern float GVK_MARKER_COLOR_YELLOW[4];
+extern float GVK_MARKER_COLOR_PURPLE[4];
+extern float GVK_MARKER_COLOR_BROWN[4];
+extern float GVK_MARKER_COLOR_GRAY[4];
+extern float GVK_MARKER_COLOR_WHITE[4];

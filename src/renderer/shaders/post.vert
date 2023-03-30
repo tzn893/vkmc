@@ -1,3 +1,5 @@
+#version 450
+
 //draw a whole quad on the whole screen
 layout(location = 0) out vec2 o_uv;
 

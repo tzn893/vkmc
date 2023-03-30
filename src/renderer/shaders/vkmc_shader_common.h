@@ -1,3 +1,6 @@
+#ifndef VKMC_SHADER_COMMON
+#define VKMC_SHADER_COMMON
+
 #include "shader/shader_common.h"
 
 VERTEX_INPUT(Vertex)
@@ -16,3 +19,5 @@ mat4    transpose_mvp;
 vec3	camera_position;
 float	time;
 PUSH_CONSTANT_END(VkmcPushConstants)
+
+#endif

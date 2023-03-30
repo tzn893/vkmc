@@ -1,3 +1,5 @@
+#version 450
+
 layout(binding = 0) uniform sampler2D off_screen_buffer;
 
 layout(location = 0) in vec2 i_uv;
@@ -15,5 +17,5 @@ void main()
 {
     vec3 color = texture(off_screen_buffer,i_uv).rgb;
     color = tone_mapping(color);
-    return vec4(color,1);
+    o_color = vec4(color,1);
 }

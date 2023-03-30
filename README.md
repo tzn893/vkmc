@@ -1,3 +1,7 @@
 # Vulkan Minecraft
 
-a minecraft-like game implementation based on vulkan api.
+A minecraft-like game based on vulkan.
+
+### v 0.1.0 Rendering Terrian
+
+![](images/v.0.1.png)

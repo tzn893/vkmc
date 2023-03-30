@@ -1,5 +1,5 @@
+#pragma once
 #include "alloc.h"
-
 
 class MemoryArenaAllocator : public Allocator
 {

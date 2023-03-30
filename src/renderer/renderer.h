@@ -3,20 +3,14 @@
 #include "alloc/arena.h"
 #include "gvk.h"
 
-class RenderComponent;
-
-EVENT_CLASS(ResizeEvent)
-ResizeEvent(u32 w, u32 h) :new_width(w), new_height(h) {}
-
-u32 new_width, new_height;
-EVENT_CLASS_END(ResizeEvent)
-
+class Terrian;
+class TerrianRenderer;
 
 class Renderer : public Task 
 {
 public:
 
-	Renderer(float offscree_scale_ratio,ptr<gvk::Window> window);
+	Renderer(ptr<gvk::Window> window);
 
 	virtual bool		Initialize(TaskManager* manager) ;
 
@@ -24,13 +18,10 @@ public:
 
 	virtual void		Finalize(TaskManager* manager) ;
 
-	bool				RegisterRenderComponent(ptr<RenderComponent> compoent);
-
-	void				UnregisterRenderComponent(ptr<RenderComponent> component);
-
-	std::tuple<u32, u32> GetCurrentBackbufferExtent();
-
+	bool AddTerrian(ptr<Terrian> terrian);
 private:
+
+	bool				RecreateOffscreenBuffers();
 
 	ptr<gvk::Context>		m_Context;
 	ptr<gvk::Window>		m_Window;
@@ -39,28 +30,28 @@ private:
 	//only one command pool for one thread
 	ptr<gvk::CommandPool>	m_CommandPool;
 
-	float											m_OffscreenScaleRatio;
 	u32												m_OffscreenBufferWidth, m_OffscreenBufferHeight;
 
 	ptr<gvk::Shader>								m_PostVertexShader;
 	ptr<gvk::Shader>								m_PostFragmentShader;
-	ptr<gvk::Pipeline>								m_PostScreenPipeline;
+	ptr<gvk::Pipeline>								m_PostProcessPipeline;
 	std::vector<ptr<gvk::DescriptorSet>>			m_PostDescriptorSets;
 	VkSampler										m_PostOffScreenBufferSampler;
-	//render pass for post screen operations
-	ptr<gvk::RenderPass>							m_PostScreenRenderPass;
-	std::vector<VkFramebuffer>						m_PostScreenFrameBuffers;
-	//for synchronization between offscreen pass and swap chain
-	std::vector<VkSemaphore>						m_PostScreenFinishSemaphores;
-
-
-	std::vector<VkFramebuffer>						m_OffscreenFrameBuffers;
+	
 	std::vector<ptr<gvk::Image>>					m_OffscreenBuffers;
+	std::vector<VkFramebuffer>						m_OffscreenFrameBuffers;
+	std::vector<VkImageView>						m_OffscreenImageView;
+
+
+	u32												m_OffscreenBufferAttachmentIdx;
+	u32												m_BackBufferAttachmentIdx;
+	u32												m_DepthStencilBufferAttachmentIdx;
 
 	//forward render pass
 	ptr<gvk::RenderPass>							m_ForwardRenderPass;
 	static constexpr VkFormat						m_DepthStencilFormat = VK_FORMAT_D24_UNORM_S8_UINT;
-	ptr<gvk::Image>									m_DepthStencilBuffer;
+	std::vector<ptr<gvk::Image>>					m_DepthStencilBuffers;
+	std::vector<VkImageView>						m_DepthStencilBufferViews;
 
 	//frame in flight present fence
 	std::vector<VkFence>							m_PostScreenFences;
@@ -71,8 +62,16 @@ private:
 	std::string										m_ShaderRootPath;
 	std::vector<VkCommandBuffer>					m_CommandBuffers;
 
-	std::vector<ptr<RenderComponent>>				m_RegisteredRenderComponents;
-
 	//arena allocator for allocating render objects in every frame
 	MemoryArenaAllocator							m_MemoryArenaAllocator;
+
+
+	u32												m_TerrianPassIdx;
+	//u32											m_HizPassIdx;
+	//u32											m_CullingPassIdx;
+	u32												m_PostProcessPassIdx;
+
+	std::vector<VkSemaphore>						m_FinishSemaphores;
+
+	ptr<TerrianRenderer>							m_TerrianRenderer;
 };

@@ -16,8 +16,6 @@ class TaskManager;
 class Task 
 {
 public:
-
-
 	virtual bool		Initialize(TaskManager* manager) = 0;
 
 	virtual TaskTick	Tick(TaskManager* manager,float delta_time) = 0;
@@ -51,6 +49,7 @@ public:
 
 		if (!new_task->Initialize(this)) return std::nullopt;
 		m_Tasks.push_back(new_task);
+		m_TaskIDs.push_back(TaskID<TaskType>::Get());
 
 		return TaskID<TaskType>::Get();
 	}
@@ -70,6 +69,7 @@ public:
 	bool			Tick(float delta_time);
 
 private:
-	std::vector<ptr<Task>> m_Tasks;
-	ThreadPool			   m_ThreadPool;
+	std::vector<size_t>		m_TaskIDs;
+	std::vector<ptr<Task>>	m_Tasks;
+	ThreadPool				m_ThreadPool;
 };

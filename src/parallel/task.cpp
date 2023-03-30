@@ -5,13 +5,10 @@
 
 opt<ptr<Task>> TaskManager::FindTask(size_t id)
 {
-	auto res = std::find_if(m_Tasks.begin(), m_Tasks.end(), [&](const ptr<Task>& task) {
-		return task->TaskID() == id;
-		}
-	);
-	if (res != m_Tasks.end())
+	auto res = std::find(m_TaskIDs.begin(), m_TaskIDs.end(), id);
+	if (res != m_TaskIDs.end())
 	{
-		return *res;
+		return *(m_Tasks.begin() + (res - m_TaskIDs.begin()));
 	}
 	return std::nullopt;
 }

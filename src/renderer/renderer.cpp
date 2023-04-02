@@ -20,6 +20,7 @@ bool Renderer::Initialize(TaskManager* manager)
 		GvkInstanceCreateInfo info;
 		info.AddInstanceExtension(GVK_INSTANCE_EXTENSION_DEBUG);
 		info.AddLayer(GVK_LAYER_DEBUG);
+		info.AddLayer(GVK_LAYER_FPS_MONITOR);
 		if (!m_Context->InitializeInstance(info, &error))
 		{
 			return false;
@@ -103,10 +104,10 @@ bool Renderer::Initialize(TaskManager* manager)
 			//VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,VK_ACCESS_INPUT_ATTACHMENT_READ_BIT);
 
 		//terrian forward pass
-		m_TerrianPassIdx = info.AddSubpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS);
-		info.AddSubpassColorAttachment(m_TerrianPassIdx, m_OffscreenBufferAttachmentIdx);
-		info.AddSubpassDepthStencilAttachment(m_TerrianPassIdx, m_DepthStencilBufferAttachmentIdx);
-		info.AddSubpassDependency(VK_SUBPASS_EXTERNAL, m_TerrianPassIdx,
+		m_ForwardPassIdx = info.AddSubpass(0, VK_PIPELINE_BIND_POINT_GRAPHICS);
+		info.AddSubpassColorAttachment(m_ForwardPassIdx, m_OffscreenBufferAttachmentIdx);
+		info.AddSubpassDepthStencilAttachment(m_ForwardPassIdx, m_DepthStencilBufferAttachmentIdx);
+		info.AddSubpassDependency(VK_SUBPASS_EXTERNAL, m_ForwardPassIdx,
 			VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
 			0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
 		
@@ -124,7 +125,7 @@ bool Renderer::Initialize(TaskManager* manager)
 		info.AddSubpassColorAttachment(m_PostProcessPassIdx, m_BackBufferAttachmentIdx);
 		info.AddSubpassInputAttachment(m_PostProcessPassIdx, m_OffscreenBufferAttachmentIdx, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		//wait for off screen pass finishes rendering
-		info.AddSubpassDependency(m_TerrianPassIdx, m_PostProcessPassIdx,
+		info.AddSubpassDependency(m_ForwardPassIdx, m_PostProcessPassIdx,
 			VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
 			VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, VK_ACCESS_SHADER_READ_BIT);
 
@@ -289,9 +290,11 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 		render_area, viewport, scissor, cmd)
 		.NextSubPass([&]()
 		{
-			GvkDebugMarker marker(cmd, "render terrian", GVK_MARKER_COLOR_GREEN);
+			GvkDebugMarker marker(cmd, "forward pass", GVK_MARKER_COLOR_RED);
 
 			m_TerrianRenderer->Render(cmd, camera);
+			m_Skybox->Render(cmd, camera);
+
 		}
 		)
 		//TODO hiz pass and transparent pass
@@ -351,13 +354,30 @@ bool Renderer::AddTerrian(ptr<Terrian> terrian)
 
 	std::string error;
 
-	if (!m_TerrianRenderer->Initialize(m_Context, m_ForwardRenderPass, m_TerrianPassIdx,
+	if (!m_TerrianRenderer->Initialize(m_Context, m_ForwardRenderPass, m_ForwardPassIdx,
 		upload_queue, m_DescriptorAllocator, error))
 	{
 		return false;
 	}
 
 	m_TerrianRenderer->UpdateRenderData();
+
+	return true;
+}
+
+bool Renderer::AddSkybox(ptr<Skybox> sky)
+{
+	m_Skybox = sky;
+
+	UploadQueue upload_queue(m_Queue, m_Context);
+
+	std::string error;
+
+	if (!m_Skybox->Initialize(m_Context,m_ForwardRenderPass,m_ForwardPassIdx,
+		upload_queue,m_DescriptorAllocator,error))
+	{
+		return false;
+	}
 
 	return true;
 }

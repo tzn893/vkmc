@@ -2,6 +2,7 @@
 #include "parallel/task.h"
 #include "alloc/arena.h"
 #include "gvk.h"
+#include "skybox.h"
 
 class Terrian;
 class TerrianRenderer;
@@ -19,6 +20,7 @@ public:
 	virtual void		Finalize(TaskManager* manager) ;
 
 	bool AddTerrian(ptr<Terrian> terrian);
+	bool AddSkybox(ptr<Skybox> sky);
 private:
 
 	bool				RecreateOffscreenBuffers();
@@ -66,12 +68,12 @@ private:
 	MemoryArenaAllocator							m_MemoryArenaAllocator;
 
 
-	u32												m_TerrianPassIdx;
+	u32												m_ForwardPassIdx;
 	//u32											m_HizPassIdx;
-	//u32											m_CullingPassIdx;
 	u32												m_PostProcessPassIdx;
 
 	std::vector<VkSemaphore>						m_FinishSemaphores;
 
 	ptr<TerrianRenderer>							m_TerrianRenderer;
+	ptr<Skybox>										m_Skybox;
 };

@@ -47,6 +47,7 @@ RenderCamera Camera::OnRender()
 
 	RenderCamera camera{};
 	camera.VP = proj * view;
+	camera.P = proj;
 
 	camera.aspect_ratio = m_AspectRatio;
 	camera.fov = m_Fov;

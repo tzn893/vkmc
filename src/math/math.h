@@ -121,6 +121,6 @@ namespace Math
 		return a * (1 - f) + b * f;
 	}
 
-	Mat4x4	look_at(Vector3f pos,Vector3f front,Vector3f up);
+	Mat4x4	look_at(Vector3f pos,Vector3f center,Vector3f up);
 }
 

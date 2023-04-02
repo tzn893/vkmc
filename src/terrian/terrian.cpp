@@ -293,21 +293,12 @@ void TerrianRenderer::UpdateRenderData()
 		}
 	}
 	
-
-	/*for (u32 i = 0;i < 6;i++)
-	{
-		TerrianVertex vert;
-		vert.v_face_idx = i;
-		Vector3f pos = Vector3f(0,10,0);
-		vert.v_pos = vec3{ pos.x, pos.y, pos.z };
-		vert.v_mat_idx = BLOCK_TYPE_GRASS;
-
-		m_TerrianVertexData[m_TerrianVertexCount++] = vert;
-	}*/
 }
 
 void TerrianRenderer::Render(VkCommandBuffer buffer,const RenderCamera& camera)
 {
+	GvkDebugMarker marker(buffer, "terrian", GVK_MARKER_COLOR_GREEN);
+
 	m_TerrianMVPPushConstant.Update(buffer, &camera.VP);
 	m_TerrianCameraPosConstant.Update(buffer, &camera.position);
 	float time = Singleton<Timer>().Get().TotalTime();

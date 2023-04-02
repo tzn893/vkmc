@@ -35,6 +35,16 @@ int main()
 	std::string terrian_path = std::string(VKMC_ROOT_DIRECTORY) + "/asset/blocks-test.png";
 	ptr<Terrian> terrian = std::make_shared<Terrian>(terrian_path, 114514);//(new Terrian(terrian_path, 114514));
 
+	CubeMapDesc desc;
+	desc.front = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Front.png";
+	desc.back = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Back.png" ;
+	desc.left = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Left.png" ;
+	desc.right = std::string(VKMC_ROOT_DIRECTORY) +"/asset/Daylight Box_Right.png";
+	desc.up = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Top.png"   ;
+	desc.down = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Bottom.png" ;
+
+	ptr<Skybox>	 skybox = std::make_shared<Skybox>(desc);
+
 	MainCamera& camera = Singleton<MainCamera>().Get();
 	Timer& timer = Singleton<Timer>().Get();
 
@@ -49,6 +59,11 @@ int main()
 	}
 
 	if (!renderer->AddTerrian(terrian))
+	{
+		return -1;
+	}
+
+	if (!renderer->AddSkybox(skybox))
 	{
 		return -1;
 	}

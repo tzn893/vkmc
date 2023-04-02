@@ -6,6 +6,7 @@
 struct RenderCamera
 {
 	Mat4x4 VP;
+	Mat4x4 P;
 	Vector3f position;
 	Vector3f front;
 	float far, near, fov, aspect_ratio;

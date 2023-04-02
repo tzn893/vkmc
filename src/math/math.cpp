@@ -100,7 +100,7 @@ Vector3i Math::get_face_dir(FaceCode fcode)
 	return faces[(int)fcode];
 }
 
-Mat4x4 Math::look_at(Vector3f pos, Vector3f front, Vector3f up)
+Mat4x4 Math::look_at(Vector3f pos, Vector3f center, Vector3f up)
 {
-	return glm::lookAt(pos, front, up);
+	return glm::lookAt(pos, center, up);
 }

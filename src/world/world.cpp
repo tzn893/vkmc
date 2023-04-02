@@ -3,8 +3,8 @@
 
 bool World::Initialize(TaskManager* manager)
 {
-	u32 win_width, win_height;
-	Singleton<MainCamera>::Get().Initialize(win_width, win_height);
+	/*u32 win_width, win_height;
+	Singleton<MainCamera>::Get().Initialize(win_width, win_height);*/
 
 	return true;
 }

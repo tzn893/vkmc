@@ -104,3 +104,18 @@ Mat4x4 Math::look_at(Vector3f pos, Vector3f center, Vector3f up)
 {
 	return glm::lookAt(pos, center, up);
 }
+
+float Math::distance(Vector3f lhs, Vector3f rhs)
+{
+	return glm::distance(lhs, rhs);
+}
+
+float Math::distance(Vector4f lhs, Vector4f rhs)
+{
+	return glm::distance(lhs, rhs);
+}
+
+float Math::distance(Vector2f lhs, Vector2f rhs)
+{
+	return glm::distance(lhs, rhs);
+}

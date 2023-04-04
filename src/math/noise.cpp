@@ -17,8 +17,8 @@ namespace Math
 
 	float Perlin2D(Vector2f pos, float seed)
 	{
-		uint u0 = (uint)pos.x, v0 = (uint)pos.y;
-		uint u1 = u0 + 1, v1 = v0 + 1;
+		int u0 = (int)floor(pos.x), v0 = (int)floor(pos.y);
+		int u1 = u0 + 1, v1 = v0 + 1;
 
 		float fu = pos.x - u0, fv = pos.y - v0;
 

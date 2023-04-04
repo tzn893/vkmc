@@ -11,6 +11,8 @@ struct FTerrianHeader
 	FTerrianHeader();
 };
 
+constexpr u32 FTERRIAN_CACHE_SIZE = 1;
+
 class FTerrian
 {
 public:
@@ -40,6 +42,6 @@ private:
 	FTerrianHeader						m_Header;
 
 	u32									m_CachedChunkCount;
-	std::array<ptr<TerrianChunk>, 16>	m_CachedChunk;
+	std::array<ptr<TerrianChunk>, FTERRIAN_CACHE_SIZE>	m_CachedChunk;
 	const std::string&					m_FilePath;
 };

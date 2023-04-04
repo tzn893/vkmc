@@ -22,6 +22,7 @@ bool Terrian::Initialize()
 {
 	//m_LoadedChunk =  GenerateTerrianChunk(0, 0);
 
+	m_LoadedChunkCount = 0;
 	m_Renderer = ptr<TerrianRenderer>(new TerrianRenderer(m_TerrianAtlasPath, this));
 
 	match
@@ -30,7 +31,18 @@ bool Terrian::Initialize()
 		m_TerrianFile = f.value(),
 		return false;
 	);
-	m_LoadedChunk = LoadTerrianChunk(0, 0);
+
+	MainCamera& camera = Singleton<MainCamera>().Get();
+
+	std::vector<Vector3i> to_load_chunk_idxs = CoveredTerrianChunks(camera.GetPosition(), camera.GetFar());
+
+	for (u32 i = 0;i < to_load_chunk_idxs.size();i++)
+	{
+		auto idx = to_load_chunk_idxs[i];
+		m_LoadedChunk[m_LoadedChunkCount++] = LoadTerrianChunk(idx.x, idx.z);
+	}
+
+	m_Asyc.ToStore.reserve(9);
 
 	return true;
 }
@@ -46,16 +58,46 @@ void Terrian::Update(ptr<gvk::Window> window)
 	ThreadPool& tp = Singleton<ThreadPool>().Get();
 
 	MainCamera& cam = Singleton<MainCamera>().Get();
-	Vector3i idx = ToTerrianChunkIndex(cam.GetPosition());
-	if (idx != m_LoadedChunk->GetTrunkIndex() && !m_TerrianReloadTriggered)
+
+
+	std::vector<Vector3i> covered_idxs = CoveredTerrianChunks(cam.GetPosition(), cam.GetFar());
+	if (NeedTerrianReload(covered_idxs) && !m_TerrianReloadTriggered)
 	{
 		m_ReloadTerrianJob = tp.EnqueueJob(
-			[&,idx]()
+			[&, covered_idxs]()
 			{
-				auto chunk = LoadTerrianChunk(idx.x, idx.z);
-				
-				m_SwapChunk = chunk;
-				m_Renderer->UpdateRenderData(m_SwapChunk);
+				m_Asyc.ToStore.clear();
+				std::vector<bool>	need_to_load(covered_idxs.size(), true);
+
+				for (u32 i = 0; i < m_LoadedChunkCount; i++)
+				{
+					Vector3i idx = m_LoadedChunk[i]->GetTrunkIndex();
+					auto res = std::find(covered_idxs.begin(), covered_idxs.end(), idx);
+
+					i32 new_idx = res - covered_idxs.begin();
+					i32 old_idx = i;
+					if (res == covered_idxs.end())
+					{
+						m_Asyc.ToStore.push_back(old_idx);
+					}
+					else
+					{
+						m_Asyc.Chunks[new_idx] = m_LoadedChunk[old_idx];
+						need_to_load[new_idx] = false;
+					}
+				}
+
+				for (u32 i = 0;i < need_to_load.size();i++)
+				{
+					if (need_to_load[i])
+					{
+						auto idx = covered_idxs[i];
+						m_Asyc.Chunks[i] = LoadTerrianChunk(idx.x, idx.z);
+					}
+				}
+
+				m_Asyc.ChunkCount = covered_idxs.size();
+				m_Renderer->UpdateRenderData(gvk::View<ptr<TerrianChunk>>(m_Asyc.Chunks.data(), 0, m_Asyc.ChunkCount));
 			}
 		);
 
@@ -65,12 +107,32 @@ void Terrian::Update(ptr<gvk::Window> window)
 	if (m_TerrianReloadTriggered && m_ReloadTerrianJob.Finish())
 	{
 		m_TerrianReloadTriggered = false;
-		std::swap(m_SwapChunk, m_LoadedChunk);
+		for (u32 i = 0;i < 9;i++)
+		{
+			std::swap(m_Asyc.Chunks[i], m_LoadedChunk[i]);
+		}
+		std::swap(m_Asyc.ChunkCount, m_LoadedChunkCount);
 		m_Renderer->FlushRenderData();
+
+		std::vector<ptr<TerrianChunk>> to_store_chunks;
+		for (u32 i = 0;i < m_Asyc.ToStore.size();i++)
+		{
+			to_store_chunks.push_back(m_Asyc.Chunks[m_Asyc.ToStore[i]]);
+		}
+		for (u32 i = 0;i < m_Asyc.Chunks.size();i++)
+		{
+			m_Asyc.Chunks[i] = nullptr;
+		}
+		m_Asyc.ChunkCount = 0;
+
+		//we don't care when this job finishes ,so we don't need to trace this thread's status
 		tp.EnqueueJob(
-			[&]()
+			[&,to_store_chunks]()
 			{
-				m_TerrianFile->StoreChunk(m_SwapChunk);
+				for (u32 i = 0;i < to_store_chunks.size();i++)
+				{
+					m_TerrianFile->StoreChunk(to_store_chunks[i]);
+				}
 			}
 		);
 	}
@@ -78,7 +140,10 @@ void Terrian::Update(ptr<gvk::Window> window)
 
 Terrian::~Terrian()
 {
-	m_TerrianFile->StoreChunk(m_LoadedChunk);
+	for (u32 i = 0;i < m_LoadedChunkCount;i++)
+	{
+		m_TerrianFile->StoreChunk(m_LoadedChunk[i]);
+	}
 	m_TerrianFile = nullptr;
 }
 
@@ -89,8 +154,9 @@ ptr<TerrianChunk> Terrian::GenerateTerrianChunk(i32 _x,  i32 _z)
 	timer.Tick();
 	float a = timer.TotalTime();
 
-	Vector3f chunk_world_pos(_x , 0, _z );
-	ptr<TerrianChunk> chunk(new TerrianChunk(chunk_world_pos));
+	Vector3i chunk_idx(_x , 0, _z );
+	ptr<TerrianChunk> chunk(new TerrianChunk(chunk_idx));
+	Vector3f chunk_world_pos = chunk->GetWorldPosition();
 
 	for (i32 zi = 0; zi < BLOCK_LEN ; zi++) 
 	{
@@ -138,8 +204,104 @@ ptr<TerrianChunk> Terrian::LoadTerrianChunk(i32 x, i32 z)
 
 Vector3i Terrian::ToTerrianChunkIndex(Vector3f pos)
 {
-	return Vector3i(floor(pos.x / BLOCK_LEN), floor(pos.y / BLOCK_LEN), floor(pos.z / BLOCK_LEN));
+	return Vector3i(floor(pos.x / BLOCK_LEN), 0, floor(pos.z / BLOCK_LEN));
 }
+
+
+Vector3f Terrian::ToWorldPosition(Vector3i idx)
+{
+	return Vector3f(idx.x * BLOCK_LEN, 0, idx.z * BLOCK_LEN);
+}
+
+bool Terrian::NeedTerrianReload(const std::vector<Vector3i>& idxs)
+{
+	if (m_LoadedChunkCount != idxs.size())
+	{
+		return true;
+	}
+
+	for (u32 i = 0;i < m_LoadedChunkCount;i++)
+	{
+		if (m_LoadedChunk[i]->GetTrunkIndex() != idxs[i])
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+std::vector<Vector3i> Terrian::CoveredTerrianChunks(Vector3f camera_world_pos, float camera_radius)
+{
+	Vector3i center = ToTerrianChunkIndex(camera_world_pos);
+
+	std::vector<Vector3i> res;
+	res.reserve(9);
+
+	bool flags[2][2] = {false};
+	for (i32 u = 0; u <= 1; u++)
+	{
+		for (i32 v = 0;v <= 1;v++)
+		{
+			Vector3f world_pos = ToWorldPosition(Vector3i(center.x + u, 0, center.z + v));
+			flags[u][v] = Math::distance(Vector2f(world_pos.x,world_pos.z), Vector2f(camera_world_pos.x,camera_world_pos.z)) < camera_radius;
+		}
+	}
+
+	//(-1,-1)
+	if (flags[0][0])
+	{
+		res.push_back(center + Vector3i(-1, 0, -1));
+	}
+
+	//( 0,-1)
+	if (flags[0][0] || flags[1][0])
+	{
+		res.push_back(center + Vector3i(0, 0, -1));
+	}
+
+	//( 1,-1)
+	if (flags[1][0])
+	{
+		res.push_back(center + Vector3i(1, 0, -1));
+	}
+
+	//(-1, 0)
+	if (flags[0][0] || flags[0][1])
+	{
+		res.push_back(center + Vector3i(-1, 0, 0));
+	}
+
+	//( 0, 0)
+	res.push_back(center);
+
+	//( 1, 0)
+	if (flags[1][0] || flags[1][1])
+	{
+		res.push_back(center + Vector3i(1, 0, 0));
+	}
+
+	//(-1, 1)
+	if (flags[0][1])
+	{
+		res.push_back(center + Vector3i(-1, 0, 1));
+	}
+
+	//( 0, 1)
+	if (flags[0][1] || flags[1][1])
+	{
+		res.push_back(center + Vector3i(0, 0, 1));
+	}
+
+	//( 1, 1)
+	if (flags[1][1])
+	{
+		res.push_back(center + Vector3i(1, 0, 1));
+	}
+
+	return std::move(res);
+}
+
 
 TerrianRenderer::TerrianRenderer(const std::string& atlas_path, Terrian* terrian)
 {
@@ -336,14 +498,16 @@ bool TerrianRenderer::Initialize(gvk::ptr<gvk::Context> ctx, gvk::ptr<gvk::Rende
 	.BufferWrite(m_TerrianDescriptorSet, "terrian_materials", m_TerrianMaterialBuffer->GetBuffer(), 0, sizeof(TerrianMaterials), 0)
 	.Emit(ctx->GetDevice());
 
-	UpdateRenderData(m_Terrian->m_LoadedChunk);
+	UpdateRenderData(gvk::View<ptr<TerrianChunk>>(m_Terrian->m_LoadedChunk.data(), 0, m_Terrian->m_LoadedChunkCount));
 	FlushRenderData();
 
 	return true;
 }
 
-void TerrianRenderer::UpdateRenderData(ptr<TerrianChunk> chunk)
+void TerrianRenderer::UpdateRenderData(gvk::View<ptr<TerrianChunk>> chunks)
 {
+	//TODO : GPU version of this function
+
 	TerrianVertex* data;
 	match
 	(
@@ -358,28 +522,30 @@ void TerrianRenderer::UpdateRenderData(ptr<TerrianChunk> chunk)
 
 	m_TempTerrianVertexCount = 0;
 
-	//TODO collect info in compute shader
-	ptr<TerrianChunk> current_chunk = chunk;
-	for (u32 x = 0; x < BLOCK_LEN; x++) 
+	for (u32 i = 0;i < chunks.size();i++) 
 	{
-		for (u32 y = 0;y < BLOCK_LEN;y++)
+		ptr<TerrianChunk> current_chunk = chunks[i];
+		for (u32 x = 0; x < BLOCK_LEN; x++)
 		{
-			for (u32 z = 0; z < BLOCK_LEN; z++)
+			for (u32 y = 0; y < BLOCK_LEN; y++)
 			{
-				Block b = current_chunk->Access(Vector3i(x, y, z));
-				if (b.block_type != BLOCK_TYPE_NONE)
+				for (u32 z = 0; z < BLOCK_LEN; z++)
 				{
-					for (u32 faceIdx = 0; faceIdx < 6; faceIdx++)
+					Block b = current_chunk->Access(Vector3i(x, y, z));
+					if (b.block_type != BLOCK_TYPE_NONE)
 					{
-						if ((b.neighbor_existance & (1 << faceIdx)) == 0)
+						for (u32 faceIdx = 0; faceIdx < 6; faceIdx++)
 						{
-							TerrianVertex vert;
-							vert.v_face_idx = faceIdx;
-							Vector3f pos = Vector3f(x, y, z) + current_chunk->GetWorldPosition();
-							vert.v_pos = vec3{pos.x, pos.y, pos.z};
-							vert.v_mat_idx = b.block_type;
+							if ((b.neighbor_existance & (1 << faceIdx)) == 0)
+							{
+								TerrianVertex vert;
+								vert.v_face_idx = faceIdx;
+								Vector3f pos = Vector3f(x, y, z) + current_chunk->GetWorldPosition();
+								vert.v_pos = vec3{ pos.x, pos.y, pos.z };
+								vert.v_mat_idx = b.block_type;
 
-							data[m_TempTerrianVertexCount++] = vert;
+								data[m_TempTerrianVertexCount++] = vert;
+							}
 						}
 					}
 				}

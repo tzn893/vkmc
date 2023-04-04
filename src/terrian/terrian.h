@@ -22,7 +22,7 @@ public:
 	bool Initialize(gvk::ptr<gvk::Context> ctx,gvk::ptr<gvk::RenderPass> render_pass,
 		uint subpass_idx, UploadQueue& upload_queue, gvk::ptr<gvk::DescriptorAllocator> alloc,std::string& error);
 
-	void UpdateRenderData(ptr<TerrianChunk> chunk);
+	void UpdateRenderData(gvk::View<ptr<TerrianChunk>> chunk);
 
 	void FlushRenderData();
 
@@ -74,23 +74,39 @@ public:
 
 private:
 
-	ptr<TerrianChunk> GenerateTerrianChunk(i32 x, i32 z);
+	ptr<TerrianChunk>		GenerateTerrianChunk(i32 x, i32 z);
 
-	ptr<TerrianChunk> LoadTerrianChunk(i32 x, i32 z);
+	ptr<TerrianChunk>		LoadTerrianChunk(i32 x, i32 z);
 
-	Vector3i		  ToTerrianChunkIndex(Vector3f pos);
+	Vector3i				ToTerrianChunkIndex(Vector3f pos);
 
-	ptr<TerrianChunk>				m_SwapChunk;
-	ptr<TerrianChunk>				m_LoadedChunk;
-	//std::vector<ptr<TerrianChunk>>	m_LoadedChunks;
-	ptr<TerrianRenderer>			m_Renderer;
+	Vector3f				ToWorldPosition(Vector3i idx);
 
-	JobStatus						m_ReloadTerrianJob;
-	bool							m_TerrianReloadTriggered = false;
+	bool					NeedTerrianReload(const std::vector<Vector3i>& idxs);
 
-	ptr<FTerrian>					m_TerrianFile;
+	std::vector<Vector3i>	CoveredTerrianChunks(Vector3f camera_world_pos, float camera_radius);
 
-	uint							m_Seed;
+
+	struct AsycInfo
+	{
+		std::vector<i32>					ToStore;
+
+		u32									ChunkCount;
+		//worst case we have to load 9 chunks
+		std::array<ptr<TerrianChunk>, 9>	Chunks;
+	} m_Asyc;
+
+	u32									m_LoadedChunkCount;
+	std::array<ptr<TerrianChunk>,9>		m_LoadedChunk;
+
+	ptr<TerrianRenderer>				m_Renderer;
+
+	JobStatus							m_ReloadTerrianJob;
+	bool								m_TerrianReloadTriggered = false;
+
+	ptr<FTerrian>						m_TerrianFile;
+
+	uint								m_Seed;
 
 
 	std::string m_TerrianAtlasPath;

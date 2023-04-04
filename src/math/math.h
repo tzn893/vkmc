@@ -122,5 +122,11 @@ namespace Math
 	}
 
 	Mat4x4	look_at(Vector3f pos,Vector3f center,Vector3f up);
+
+	float	distance(Vector2f lhs, Vector2f rhs);
+
+	float	distance(Vector3f lhs, Vector3f rhs);
+
+	float	distance(Vector4f lhs, Vector4f rhs);
 }
 

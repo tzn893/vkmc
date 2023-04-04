@@ -27,6 +27,16 @@ void Camera::SetFront(Vector3f front)
 	m_Front = front;
 }
 
+float Camera::GetFar()
+{
+	return m_Far;
+}
+
+float Camera::GetNear()
+{
+	return m_Near;
+}
+
 void Camera::SetFar(float far)
 {
 	m_Far = far;
@@ -40,6 +50,11 @@ void Camera::SetNear(float near)
 void Camera::SetFov(float fov)
 {
 	m_Fov = fov;
+}
+
+float Camera::GetFov()
+{
+	return m_Fov;
 }
 
 MainCamera::MainCamera()

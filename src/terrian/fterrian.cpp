@@ -142,7 +142,7 @@ void FTerrian::InsertCachedChunk(ptr<TerrianChunk> chunk)
 
 	ShiftCachedChunksBy1(m_CachedChunk.size() - 1);
 	m_CachedChunk[0] = chunk;
-	m_CachedChunkCount++;
+	m_CachedChunkCount = std::min(m_CachedChunkCount + 1, FTERRIAN_CACHE_SIZE);
 }
 
 void FTerrian::StoreChunkToDisk(ptr<TerrianChunk> chunk)

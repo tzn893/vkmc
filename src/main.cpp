@@ -19,7 +19,7 @@ float fov = 45.0f;
 
 float sensitive = 30.0f;
 
-float cameraRadius = 100.f;
+float cameraRadius = 120.f;
 
 int main()
 {

@@ -24,6 +24,10 @@ public:
 
 	void			SetPosition(Vector3f pos);
 	void			SetFront(Vector3f front);
+
+	float			GetFar();
+	float			GetNear();
+	float			GetFov();
 	
 	void			SetFar(float far);
 	void			SetNear(float near);

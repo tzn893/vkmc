@@ -27,6 +27,21 @@ void Camera::SetFront(Vector3f front)
 	m_Front = front;
 }
 
+void Camera::SetFar(float far)
+{
+	m_Far = far;
+}
+
+void Camera::SetNear(float near)
+{
+	m_Near = near;
+}
+
+void Camera::SetFov(float fov)
+{
+	m_Fov = fov;
+}
+
 MainCamera::MainCamera()
 	:Camera(600,600,Vector3f(),Vector3f(0,0,1))
 {
@@ -62,8 +77,7 @@ RenderCamera Camera::OnRender()
 
 void Camera::OnResize(u32 win_width, u32 win_height)
 {
-
+	vkmc_assert(win_height != 0);
 	m_AspectRatio = (float)win_width / (float)win_height;
-
 }
 

@@ -1,3 +1,4 @@
 *.bat
 \build
 *.spv
+*.sav

@@ -1,5 +1,4 @@
 #pragma once
-#include "parallel/task.h"
 #include "alloc/arena.h"
 #include "gvk.h"
 #include "skybox.h"
@@ -7,17 +6,17 @@
 class Terrian;
 class TerrianRenderer;
 
-class Renderer : public Task 
+class Renderer 
 {
 public:
 
 	Renderer(ptr<gvk::Window> window);
 
-	virtual bool		Initialize(TaskManager* manager) ;
+	bool		Initialize() ;
 
-	virtual TaskTick	Tick(TaskManager* manager, float delta_time) ;
+	bool		Tick() ;
 
-	virtual void		Finalize(TaskManager* manager) ;
+	void		Finalize() ;
 
 	bool AddTerrian(ptr<Terrian> terrian);
 	bool AddSkybox(ptr<Skybox> sky);

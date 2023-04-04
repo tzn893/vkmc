@@ -34,13 +34,14 @@ struct Block
 	u16 block_type;
 };
 
-inline constexpr u32 BLOCK_LEN_BIT_COUNT = 7;
-inline constexpr u32 BLOCK_LEN = 1 << BLOCK_LEN_BIT_COUNT;
-inline constexpr u32 BLOCK_CHUNK_SIZE = BLOCK_LEN * BLOCK_LEN * BLOCK_LEN * sizeof(Block);
+inline constexpr i32 BLOCK_LEN_BIT_COUNT = 7;
+inline constexpr i32 BLOCK_LEN = 1 << BLOCK_LEN_BIT_COUNT;
+inline constexpr i32 BLOCK_CHUNK_SIZE = BLOCK_LEN * BLOCK_LEN * BLOCK_LEN * sizeof(Block);
 
 
 class TerrianChunk
 {
+	friend class FTerrian;
 public:
 	//opt<RayBlockIntersection>	CastRay(Ray r);
 	TerrianChunk(Vector3i terrian_chunk_idx);
@@ -53,6 +54,8 @@ public:
 
 	Vector3f					GetWorldPosition();
 
+	Vector3i					GetTrunkIndex();
+
 private:
 
 	uint						PositionToIdx(Vector3i pos);
@@ -61,4 +64,5 @@ private:
 	std::vector<Block>			m_Blocks;
 	//left bottom coordinate of the chunk is world position
 	Vector3f					m_WorldPosition;
+	Vector3i					m_Idx;
 };

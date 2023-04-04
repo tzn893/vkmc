@@ -6,11 +6,11 @@
 #include "util/timer.h"
 
 
-Vector3f cameraPos = Vector3f(0.0f, 0.0f, -30.0f);
+Vector3f cameraPos = Vector3f(0.0f, 126.0f, -30.0f);
 Vector3f cameraFront = Vector3f(0.0f, 0.0f, 1.0f);
 Vector3f cameraUp = Vector3f(0.0f, 1.0f, 0.0f);
 
-float cameraSpeed = 2.5f;
+float cameraSpeed = 5.0f;
 
 bool firstMouse = true;
 float yaw =   0.0f;// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
@@ -18,6 +18,8 @@ float pitch = 0.0f;
 float fov = 45.0f;
 
 float sensitive = 30.0f;
+
+float cameraRadius = 100.f;
 
 int main()
 {
@@ -32,8 +34,11 @@ int main()
 
 	ptr<Renderer>	renderer = std::make_shared<Renderer>(window);
 
-	std::string terrian_path = std::string(VKMC_ROOT_DIRECTORY) + "/asset/blocks-test.png";
-	ptr<Terrian> terrian = std::make_shared<Terrian>(terrian_path, 114514);//(new Terrian(terrian_path, 114514));
+	u32 seed = 114514;
+
+	std::string terrian_atlas_path = std::string(VKMC_ROOT_DIRECTORY) + "/asset/blocks-test.png";
+	std::string terrian_file_path = std::string(VKMC_ROOT_DIRECTORY) + "/asset/save-" + std::to_string(seed) + ".sav";
+	ptr<Terrian> terrian = std::make_shared<Terrian>(terrian_atlas_path, terrian_file_path, seed);//(new Terrian(terrian_path, 114514));
 
 	CubeMapDesc desc;
 	desc.front = std::string(VKMC_ROOT_DIRECTORY) + "/asset/Daylight Box_Front.png";
@@ -49,11 +54,12 @@ int main()
 	Timer& timer = Singleton<Timer>().Get();
 
 	camera.Initialize(1000, 1000);
+	camera.SetFar(cameraRadius);
 
 	camera.SetPosition(cameraPos);
 	camera.SetFront(Vector3f( Math::radians(yaw),Math::radians(pitch), 0));
 
-	if (!renderer->Initialize(NULL) || !terrian->Initialize())
+	if (!renderer->Initialize() || !terrian->Initialize())
 	{
 		return -1;
 	}
@@ -68,14 +74,13 @@ int main()
 		return -1;
 	}
 
-	
-
 	while (!window->ShouldClose()) 
 	{
 		timer.Tick();
 
-		float delta_time = timer.DeltaTime();
+		terrian->Update(window);
 
+		float delta_time = timer.DeltaTime();
 
 		float speed = cameraSpeed;
 		if (window->KeyHold(GVK_KEY_SHIFT))
@@ -119,7 +124,7 @@ int main()
 		camera.SetPosition(cameraPos);
 		camera.SetFront(cameraFront);
 
-		renderer->Tick(NULL, 0);
+		renderer->Tick();
 
 		window->UpdateWindow();
 	}

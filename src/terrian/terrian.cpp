@@ -1,5 +1,4 @@
 #include "terrian/terrian.h"
-#include "parallel/task.h"
 #include "util/event.h"
 
 #include "math/noise.h"
@@ -7,19 +6,31 @@
 
 #include "world/camera.h"
 #include "util/timer.h"
+#include "util/singleton.h"
+
+#include "parallel/threadpool.h"
 
 
-Terrian::Terrian(const std::string& terrian_atlas_path,uint seed)
+Terrian::Terrian(const std::string& terrian_atlas_path,const std::string& terrian_path,uint seed)
 {
 	m_TerrianAtlasPath = terrian_atlas_path;
+	m_TerrianFilePath = terrian_path;
 	m_Seed = seed;
 }
 
 bool Terrian::Initialize()
 {
-	GenerateTerrianChunk(0, 0);
+	//m_LoadedChunk =  GenerateTerrianChunk(0, 0);
 
 	m_Renderer = ptr<TerrianRenderer>(new TerrianRenderer(m_TerrianAtlasPath, this));
+
+	match
+	(
+		FTerrian::Load(m_TerrianFilePath), f,
+		m_TerrianFile = f.value(),
+		return false;
+	);
+	m_LoadedChunk = LoadTerrianChunk(0, 0);
 
 	return true;
 }
@@ -29,9 +40,56 @@ ptr<TerrianRenderer> Terrian::GetRenderer()
 	return m_Renderer;
 }
 
-void Terrian::GenerateTerrianChunk(i32 _x,  i32 _z)
+void Terrian::Update(ptr<gvk::Window> window)
 {
-	Vector3f chunk_world_pos(_x * BLOCK_LEN, 0, _z * BLOCK_LEN);
+	//TODO : bound box
+	ThreadPool& tp = Singleton<ThreadPool>().Get();
+
+	MainCamera& cam = Singleton<MainCamera>().Get();
+	Vector3i idx = ToTerrianChunkIndex(cam.GetPosition());
+	if (idx != m_LoadedChunk->GetTrunkIndex() && !m_TerrianReloadTriggered)
+	{
+		m_ReloadTerrianJob = tp.EnqueueJob(
+			[&,idx]()
+			{
+				auto chunk = LoadTerrianChunk(idx.x, idx.z);
+				
+				m_SwapChunk = chunk;
+				m_Renderer->UpdateRenderData(m_SwapChunk);
+			}
+		);
+
+		m_TerrianReloadTriggered = true;
+	}
+
+	if (m_TerrianReloadTriggered && m_ReloadTerrianJob.Finish())
+	{
+		m_TerrianReloadTriggered = false;
+		std::swap(m_SwapChunk, m_LoadedChunk);
+		m_Renderer->FlushRenderData();
+		tp.EnqueueJob(
+			[&]()
+			{
+				m_TerrianFile->StoreChunk(m_SwapChunk);
+			}
+		);
+	}
+}
+
+Terrian::~Terrian()
+{
+	m_TerrianFile->StoreChunk(m_LoadedChunk);
+	m_TerrianFile = nullptr;
+}
+
+ptr<TerrianChunk> Terrian::GenerateTerrianChunk(i32 _x,  i32 _z)
+{
+
+	Timer& timer = Singleton<Timer>().Get();
+	timer.Tick();
+	float a = timer.TotalTime();
+
+	Vector3f chunk_world_pos(_x , 0, _z );
 	ptr<TerrianChunk> chunk(new TerrianChunk(chunk_world_pos));
 
 	for (i32 zi = 0; zi < BLOCK_LEN ; zi++) 
@@ -59,8 +117,28 @@ void Terrian::GenerateTerrianChunk(i32 _x,  i32 _z)
 			}
 		}
 	}
+	timer.Tick();
+	float b = timer.TotalTime();
 
-	m_LoadedChunk = chunk;
+	vkmc_log("time elapsed {}", b - a);
+
+
+	return chunk;
+}
+
+ptr<TerrianChunk> Terrian::LoadTerrianChunk(i32 x, i32 z)
+{
+	auto chunk = m_TerrianFile->LoadChunk(Vector3i(x, 0, z));
+	if (!chunk.has_value())
+	{
+		return GenerateTerrianChunk(x, z);
+	}
+	return chunk.value();
+}
+
+Vector3i Terrian::ToTerrianChunkIndex(Vector3f pos)
+{
+	return Vector3i(floor(pos.x / BLOCK_LEN), floor(pos.y / BLOCK_LEN), floor(pos.z / BLOCK_LEN));
 }
 
 TerrianRenderer::TerrianRenderer(const std::string& atlas_path, Terrian* terrian)
@@ -193,14 +271,16 @@ bool TerrianRenderer::Initialize(gvk::ptr<gvk::Context> ctx, gvk::ptr<gvk::Rende
 			m_TerrianVertexBuffer = b.value(),
 			return false
 		);
-		m_TerrianVertexBuffer->SetDebugName("terrian vertex buffer");
+		m_TerrianVertexBuffer->SetDebugName("terrian vertex buffer 0");
 
+		//for multi-thread update
 		match
 		(
-			m_TerrianVertexBuffer->Map(), p,
-			m_TerrianVertexData = (TerrianVertex*)p.value(),
+			ctx->CreateBuffer(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, terrian_vertex_buffer_size, GVK_HOST_WRITE_RANDOM), b,
+			m_TempTerrianVertexBuffer = b.value(),
 			return false
 		);
+		m_TempTerrianVertexBuffer->SetDebugName("terrian vertex buffer 1");
 
 		u32 terrian_material_buffer_size = sizeof(TerrianMaterials);
 
@@ -256,16 +336,30 @@ bool TerrianRenderer::Initialize(gvk::ptr<gvk::Context> ctx, gvk::ptr<gvk::Rende
 	.BufferWrite(m_TerrianDescriptorSet, "terrian_materials", m_TerrianMaterialBuffer->GetBuffer(), 0, sizeof(TerrianMaterials), 0)
 	.Emit(ctx->GetDevice());
 
+	UpdateRenderData(m_Terrian->m_LoadedChunk);
+	FlushRenderData();
+
 	return true;
 }
 
-void TerrianRenderer::UpdateRenderData()
+void TerrianRenderer::UpdateRenderData(ptr<TerrianChunk> chunk)
 {
-	m_TerrianVertexCount = 0;
+	TerrianVertex* data;
+	match
+	(
+		m_TempTerrianVertexBuffer->Map(), p,
+		data = (TerrianVertex*)p.value(),
+		return;
+	);
+
+	Timer& timer = Singleton<Timer>().Get();
+	timer.Tick();
+	float a = timer.TotalTime();
+
+	m_TempTerrianVertexCount = 0;
 
 	//TODO collect info in compute shader
-	
-	ptr<TerrianChunk> current_chunk = m_Terrian->m_LoadedChunk;
+	ptr<TerrianChunk> current_chunk = chunk;
 	for (u32 x = 0; x < BLOCK_LEN; x++) 
 	{
 		for (u32 y = 0;y < BLOCK_LEN;y++)
@@ -285,7 +379,7 @@ void TerrianRenderer::UpdateRenderData()
 							vert.v_pos = vec3{pos.x, pos.y, pos.z};
 							vert.v_mat_idx = b.block_type;
 
-							m_TerrianVertexData[m_TerrianVertexCount++] = vert;
+							data[m_TempTerrianVertexCount++] = vert;
 						}
 					}
 				}
@@ -293,6 +387,16 @@ void TerrianRenderer::UpdateRenderData()
 		}
 	}
 	
+	timer.Tick();
+	float b = timer.TotalTime();
+
+	vkmc_log("time elapsed {}", b - a);
+}
+
+void TerrianRenderer::FlushRenderData()
+{
+	std::swap(m_TerrianVertexBuffer, m_TempTerrianVertexBuffer);
+	std::swap(m_TempTerrianVertexCount, m_TerrianVertexCount);
 }
 
 void TerrianRenderer::Render(VkCommandBuffer buffer,const RenderCamera& camera)

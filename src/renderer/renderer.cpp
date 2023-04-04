@@ -6,7 +6,7 @@
 #include <map>
 
 
-bool Renderer::Initialize(TaskManager* manager)
+bool Renderer::Initialize()
 {
 	std::string error;
 
@@ -225,7 +225,7 @@ bool Renderer::Initialize(TaskManager* manager)
 	return true;
 }
 
-TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
+bool Renderer::Tick()
 {
 	u32 frame_idx = m_Context->CurrentFrameIndex();
 	vkWaitForFences(m_Context->GetDevice(), 1, &m_PostScreenFences[frame_idx], VK_TRUE, UINT64_MAX);
@@ -248,7 +248,7 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 	}
 	else 
 	{
-		return TASK_TICK_ERROR;
+		return false;
 	}
 
 	//TODO : changing view port and scissor rects
@@ -324,10 +324,10 @@ TaskTick Renderer::Tick(TaskManager* manager, float delta_time)
 
 	m_Context->Present(gvk::SemaphoreInfo().Wait(m_FinishSemaphores[frame_idx], 0));
 
-	return TASK_TICK_CONTINUE;
+	return true;
 }
 
-void Renderer::Finalize(TaskManager* manager)
+void Renderer::Finalize()
 {
 	for (auto f : m_PostScreenFences) 
 	{
@@ -359,8 +359,6 @@ bool Renderer::AddTerrian(ptr<Terrian> terrian)
 	{
 		return false;
 	}
-
-	m_TerrianRenderer->UpdateRenderData();
 
 	return true;
 }

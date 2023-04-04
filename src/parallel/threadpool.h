@@ -4,23 +4,48 @@
 #include <queue>
 #include "common.h"
 
-class ThreadPool 
+#include <atomic>
+
+class JobStatus
 {
-	friend class TaskManager;
 public:
+	JobStatus();
 
-	ThreadPool& EnqueueJob(std::function<void()> job);
+	JobStatus(ptr<std::atomic<bool>> finish);
 
-	void		Join();
+	bool Finish();
 
-	~ThreadPool();
+	~JobStatus();
+
 private:
+	ptr<std::atomic<bool>> m_Finish;
+};
+
+class ThreadPool : public Is_Signleton 
+{
+public:
 	ThreadPool();
 
+	JobStatus EnqueueJob(std::function<void()> job);
+
+	void	  Stop();
+
+	void	  JoinAll();
+
+	~ThreadPool();
+
+private:
 	void		ThreadLoop();
 	void		RecreatePool();
 
-	std::queue<std::function<void()>>			m_Jobs;
+
+	struct Job
+	{
+		std::function<void()>	job;
+		ptr<std::atomic<bool>>  finish;
+	};
+
+	std::queue<Job>			m_Jobs;
 	std::mutex									m_JobQueueMutex;
 	std::condition_variable						m_Notifier;
 	std::vector<std::thread>					m_Threads;

@@ -13,7 +13,8 @@ bool OutofBoundary(Vector3i pos)
 
 TerrianChunk::TerrianChunk(Vector3i coord)
 {
-	m_WorldPosition = Vector3f(coord.x * BLOCK_LEN, coord.y * BLOCK_LEN, coord.z * BLOCK_LEN);
+	m_Idx = coord;
+	m_WorldPosition = Vector3f(coord.x * (i32)BLOCK_LEN, coord.y * (i32)BLOCK_LEN, coord.z * (i32)BLOCK_LEN);
 	m_Blocks.resize(BLOCK_LEN * BLOCK_LEN * BLOCK_LEN, Block{ 0,BLOCK_TYPE_NONE });
 }
 
@@ -67,6 +68,11 @@ const Block& TerrianChunk::Access(Vector3i pos)
 Vector3f TerrianChunk::GetWorldPosition()
 {
 	return m_WorldPosition;
+}
+
+Vector3i TerrianChunk::GetTrunkIndex()
+{
+	return m_Idx;
 }
 
 uint TerrianChunk::PositionToIdx(Vector3i pos)

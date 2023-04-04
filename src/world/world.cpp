@@ -1,7 +1,7 @@
 #include "world/world.h"
 #include "camera.h"
 
-bool World::Initialize(TaskManager* manager)
+bool World::Initialize()
 {
 	/*u32 win_width, win_height;
 	Singleton<MainCamera>::Get().Initialize(win_width, win_height);*/
@@ -9,12 +9,12 @@ bool World::Initialize(TaskManager* manager)
 	return true;
 }
 
-TaskTick World::Tick(TaskManager* manager, float delta_time)
+bool World::Tick()
 {
-	return TASK_TICK_CONTINUE;
+	return true;
 }
 
-void World::Finalize(TaskManager* manager)
+void World::Finalize()
 {
 
 }

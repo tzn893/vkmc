@@ -24,6 +24,10 @@ public:
 
 	void			SetPosition(Vector3f pos);
 	void			SetFront(Vector3f front);
+	
+	void			SetFar(float far);
+	void			SetNear(float near);
+	void			SetFov(float fov);
 
 	RenderCamera	OnRender();
 	void			OnResize(u32 win_width, u32 win_height);

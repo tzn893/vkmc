@@ -1,14 +1,14 @@
 #pragma once
-#include "parallel/task.h"
 
-class World : public Task 
+class World 
 {
 public:
 
-	virtual bool		Initialize(TaskManager* manager) ;
+	bool		Initialize() ;
 
-	virtual TaskTick	Tick(TaskManager* manager, float delta_time);
+	bool		Tick();
 
-	virtual void		Finalize(TaskManager* manager);
+	void		Finalize();
 private:
+
 };
